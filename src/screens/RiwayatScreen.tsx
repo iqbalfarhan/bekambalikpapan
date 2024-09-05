@@ -11,7 +11,6 @@ import {
 } from '../constants/Sizes';
 import OrderCard from '../components/order/OrderCard';
 import BottomSheet from '../components/BottomSheet';
-import Typo from '../components/Typo';
 import DetailItem from '../components/DetailItem';
 import { hariTanggal } from '../utils/Formatters';
 

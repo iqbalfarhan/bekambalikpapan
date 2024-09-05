@@ -4,11 +4,7 @@ import Wrapper from '../Wrapper';
 import Typo from '../Typo';
 import Avatar from '../Avatar';
 import { bgColor } from '../../constants/Colors';
-import {
-  containerGap,
-  containerPadding,
-  roundedBox,
-} from '../../constants/Sizes';
+import { roundedBox } from '../../constants/Sizes';
 
 type PaketCardProps = {
   data: PaketType;
