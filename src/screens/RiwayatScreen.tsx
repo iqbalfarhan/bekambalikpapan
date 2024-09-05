@@ -39,7 +39,6 @@ const RiwayatScreen = () => {
         label='Detail riwayat bekam'
         visible={selected ? true : false}
         onBackdropPress={() => setSelected(null)}
-        onRequestClose={() => setSelected(null)}
       >
         <Wrapper gap={inputButtonCardGap}>
           <DetailItem

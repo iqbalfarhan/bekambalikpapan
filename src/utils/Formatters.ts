@@ -19,3 +19,13 @@ export function hariTanggal(tanggal: string) {
 
   return formatter.format(date);
 }
+
+export function getInitials(name: string): string {
+  const initials = name
+    .split(' ')
+    .map((word) => word.charAt(0))
+    .join('')
+    .toUpperCase();
+
+  return initials.slice(0, 2);
+}

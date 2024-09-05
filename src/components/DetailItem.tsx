@@ -9,9 +9,11 @@ type DetailItemProps = {
 
 export default function DetailItem({ label, value }: DetailItemProps) {
   return (
-    <Wrapper justifyContent='space-between' flexDirection='row'>
+    <Wrapper justifyContent='space-between' flexDirection='row' gap={10}>
       <Typo>{label}</Typo>
-      <Typo>{value}</Typo>
+      <Typo flex={1} textAlign='right'>
+        {value}
+      </Typo>
     </Wrapper>
   );
 }

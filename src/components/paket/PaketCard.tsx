@@ -17,15 +17,15 @@ type PaketCardProps = {
 export default function PaketCard({ data }: PaketCardProps) {
   return (
     <Wrapper
-      padding={containerPadding}
+      padding={13}
       flexDirection='row'
-      gap={containerGap}
-      width={300}
+      gap={13}
+      width={270}
       backgroundColor={bgColor.base3}
       borderRadius={roundedBox}
       alignItems='center'
     >
-      <Avatar size={60} borderRadius={20} />
+      <Avatar size={65} borderRadius={20} type='image' label={data.photo} />
       <Wrapper flex={1} flexDirection='column'>
         <Typo size='lg' bold color={bgColor.primary} numberOfLines={1}>
           {data.name}

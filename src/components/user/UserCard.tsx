@@ -24,7 +24,7 @@ export default function UserCard() {
           {user?.name}
         </Typo>
       </Wrapper>
-      <Avatar />
+      <Avatar type='image' label={user?.photo} />
     </Wrapper>
   );
 }

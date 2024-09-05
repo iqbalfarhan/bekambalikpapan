@@ -17,7 +17,13 @@ export default function BottomSheet({
   ...other
 }: BottomSheetProps) {
   return (
-    <Modal animationType='fade' statusBarTranslucent transparent {...other}>
+    <Modal
+      animationType='fade'
+      statusBarTranslucent
+      transparent
+      onRequestClose={onBackdropPress}
+      {...other}
+    >
       <Pressable
         onPress={onBackdropPress}
         style={{ flex: 1, backgroundColor: bgColor.neutral, opacity: 0.5 }}

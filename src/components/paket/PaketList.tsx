@@ -1,44 +1,51 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Wrapper from '../Wrapper';
-import { FlatList } from 'react-native';
-import { containerGap, containerPadding } from '../../constants/Sizes';
+import { FlatList, TouchableOpacity } from 'react-native';
+import { containerPadding, inputButtonCardGap } from '../../constants/Sizes';
 import PaketCard from './PaketCard';
 import { PaketType } from '../../dataTypes/PaketType';
 import Typo from '../Typo';
+import useFetch from '../../hooks/useFetch';
+import BottomSheet from '../BottomSheet';
+import DetailItem from '../DetailItem';
 
 export default function PaketList() {
-  const contohPaket: PaketType[] = [
-    {
-      id: 1,
-      name: 'Paket Bekam basah',
-      harga: 'Rp. 100,000',
-      keterangan: 'Paket A ini cocok untuk anda yang ingin menjual produk anda',
-      photo: 'https://example.com/image.jpg',
-    },
-    {
-      id: 2,
-      name: 'Paket Bekam kering',
-      harga: 'Rp. 100,000',
-      keterangan: 'Paket A ini cocok untuk anda yang ingin menjual produk anda',
-      photo: 'https://example.com/image.jpg',
-    },
-  ];
+  const [selected, setSelected] = useState<PaketType | null>(null);
+  const { data } = useFetch<PaketType[]>('/paket');
   return (
-    <Wrapper gap={containerGap}>
-      <Wrapper paddingHorizontal={containerPadding}>
-        <Typo size='xl' bold>
-          Paket bekam
-        </Typo>
+    <>
+      <Wrapper gap={10}>
+        <Wrapper paddingHorizontal={containerPadding}>
+          <Typo size='xl' bold>
+            Paket bekam
+          </Typo>
+        </Wrapper>
+        <FlatList
+          contentContainerStyle={{
+            paddingHorizontal: containerPadding,
+            gap: 14,
+          }}
+          horizontal
+          data={data}
+          renderItem={({ item }) => (
+            <TouchableOpacity onPress={() => setSelected(item)}>
+              <PaketCard data={item} />
+            </TouchableOpacity>
+          )}
+        />
       </Wrapper>
-      <FlatList
-        contentContainerStyle={{
-          paddingHorizontal: containerPadding,
-          gap: containerGap,
-        }}
-        horizontal
-        data={contohPaket}
-        renderItem={({ item }) => <PaketCard data={item} />}
-      />
-    </Wrapper>
+
+      <BottomSheet
+        label='Detail paket bekam'
+        visible={selected ? true : false}
+        onBackdropPress={() => setSelected(null)}
+      >
+        <Wrapper gap={inputButtonCardGap}>
+          <DetailItem label='Nama paket' value={selected?.name ?? ''} />
+          <DetailItem label='Harga paket' value={selected?.harga ?? ''} />
+          <DetailItem label='Keterangan' value={selected?.keterangan ?? ''} />
+        </Wrapper>
+      </BottomSheet>
+    </>
   );
 }

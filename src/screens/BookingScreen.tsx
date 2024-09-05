@@ -70,7 +70,6 @@ const BookingScreen = () => {
         label='Pilih paket bekam'
         visible={showPaketModal}
         onBackdropPress={() => setShowPaketModal(false)}
-        onRequestClose={() => setShowPaketModal(false)}
       >
         <Wrapper gap={inputButtonCardGap}>
           {paket.data &&
