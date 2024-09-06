@@ -29,7 +29,7 @@ export default function SesiCard({ data }: SesiCardProps) {
     return <Alert message={error} />;
   }
 
-  const terisi: boolean = sesi?.length === 0 ? true : false;
+  const terisi: boolean = sesi?.length === 0 ? false : true;
   const color = terisi ? bgColor.error : bgColor.primary;
   return (
     <Wrapper
@@ -40,6 +40,7 @@ export default function SesiCard({ data }: SesiCardProps) {
       borderRadius={roundedBox}
       flexDirection='row'
       alignItems='center'
+      opacity={isLoading ? 0.5 : 1}
     >
       <Octicons
         name={terisi ? 'calendar' : 'check-circle'}
@@ -55,9 +56,13 @@ export default function SesiCard({ data }: SesiCardProps) {
         </Typo>
       </Wrapper>
       {isLoading ? (
-        <Typo color={color}>loading</Typo>
+        <Typo color={color} size='sm'>
+          loading
+        </Typo>
       ) : terisi ? (
-        <Typo color={color}>Sudah di pesan</Typo>
+        <Typo color={color} size='sm'>
+          Sudah di pesan
+        </Typo>
       ) : (
         <Badge label='Order' icon='plus-circle' />
       )}
