@@ -8,6 +8,7 @@ import Typo from '../Typo';
 import useFetch from '../../hooks/useFetch';
 import BottomSheet from '../BottomSheet';
 import DetailItem from '../DetailItem';
+import Button from '../Button';
 
 export default function PaketList() {
   const [selected, setSelected] = useState<PaketType | null>(null);
@@ -45,6 +46,7 @@ export default function PaketList() {
           <DetailItem label='Harga paket' value={selected?.harga ?? ''} />
           <DetailItem label='Keterangan' value={selected?.keterangan ?? ''} />
         </Wrapper>
+        <Button label='Pilih paket' icon='check' />
       </BottomSheet>
     </>
   );
