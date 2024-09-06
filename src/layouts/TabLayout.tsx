@@ -8,10 +8,10 @@ import ProfileScreen from '../screens/ProfileScreen';
 import { Octicons } from '@expo/vector-icons';
 import { bgColor, textColor } from '../constants/Colors';
 
-type TabsStackParamList = {
+export type TabsStackParamList = {
   Home: undefined;
   Sesi: undefined;
-  Booking: undefined;
+  Booking?: { sesi_id?: number; paket_id?: number };
   Riwayat: undefined;
   Profile: undefined;
 };

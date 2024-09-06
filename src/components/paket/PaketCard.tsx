@@ -21,7 +21,12 @@ export default function PaketCard({ data }: PaketCardProps) {
       borderRadius={roundedBox}
       alignItems='center'
     >
-      <Avatar size={65} borderRadius={20} type='image' label={data.photo} />
+      <Avatar
+        size={65}
+        borderRadius={roundedBox}
+        type='image'
+        label={data.photo}
+      />
       <Wrapper flex={1} flexDirection='column'>
         <Typo size='lg' bold color={bgColor.primary} numberOfLines={1}>
           {data.name}

@@ -3,6 +3,7 @@ import Wrapper from '../components/Wrapper';
 import { containerGap, containerPadding } from '../constants/Sizes';
 import UserCard from '../components/user/UserCard';
 import PaketList from '../components/paket/PaketList';
+import OrderList from '../components/order/OrderList';
 
 const HomeScreen = () => {
   return (
@@ -12,6 +13,9 @@ const HomeScreen = () => {
       </Wrapper>
 
       <PaketList />
+      <Wrapper padding={containerPadding}>
+        <OrderList />
+      </Wrapper>
     </>
   );
 };

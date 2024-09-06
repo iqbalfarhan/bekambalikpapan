@@ -24,7 +24,7 @@ const ProfileScreen = () => {
           alignItems='center'
           gap={20}
         >
-          <Avatar size={120} />
+          <Avatar size={120} type='image' label={user?.photo} />
           <Wrapper alignItems='center'>
             <Typo size='xl2' color={bgColor.primary} bold>
               {user?.name}

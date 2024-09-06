@@ -18,7 +18,7 @@ export default function Avatar({
   borderRadius,
   label = 'A',
   type = 'placeholder',
-  variant = 'neutral',
+  variant = 'base3',
 }: AvatarProps) {
   return (
     <Wrapper

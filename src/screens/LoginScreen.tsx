@@ -6,6 +6,7 @@ import { inputButtonCardGap } from '../constants/Sizes';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import { bgColor } from '../constants/Colors';
+import { Image } from 'react-native';
 
 export default function LoginScreen() {
   const { login } = useAuth();
@@ -40,6 +41,12 @@ export default function LoginScreen() {
       justifyContent='center'
       alignItems='center'
     >
+      <Wrapper gap={inputButtonCardGap} width={'100%'}>
+        <Image
+          source={require('../../assets/logoimage.png')}
+          style={{ height: 110, width: 110 }}
+        />
+      </Wrapper>
       <Wrapper gap={inputButtonCardGap} width={'100%'}>
         <Typo>
           Selamat datang, silahkan login dengan email yang sudah terdaftar atau

@@ -16,6 +16,8 @@ import BottomSheet from '../components/BottomSheet';
 import { PaketType } from '../dataTypes/PaketType';
 import { SesiType } from '../dataTypes/SesiType';
 import CheckBox from '../components/CheckBox';
+import DetailItem from '../components/DetailItem';
+import { bgColor } from '../constants/Colors';
 
 const BookingScreen = () => {
   const [showPaketModal, setShowPaketModal] = useState<boolean>(false);
@@ -23,6 +25,8 @@ const BookingScreen = () => {
   const [terima, setTerima] = useState<boolean>(false);
   const sesi = useFetch<SesiType[]>('/sesi');
   const paket = useFetch<PaketType[]>('/paket');
+
+  const [respok, setRespok] = useState<boolean | null>(null);
   return (
     <>
       <Wrapper padding={containerPadding} gap={containerGap}>
@@ -35,6 +39,7 @@ const BookingScreen = () => {
           <Pressable onPress={() => setShowSesiModal(true)}>
             <Input
               leftIcon='clock'
+              rightIcon='chevron-down'
               placeholder='pilih sesi bekam'
               editable={false}
             />
@@ -44,6 +49,7 @@ const BookingScreen = () => {
           <Pressable onPress={() => setShowPaketModal(true)}>
             <Input
               leftIcon='list-unordered'
+              rightIcon='chevron-down'
               placeholder='pilih paket bekam'
               editable={false}
             />
@@ -63,8 +69,47 @@ const BookingScreen = () => {
           checked={terima}
           onPress={() => setTerima(!terima)}
         />
-        <Button label='Kirim permintaan' icon='check' disabled={!terima} />
+        <Button
+          label='Kirim permintaan'
+          icon='check'
+          disabled={!terima}
+          onPress={() => setRespok(false)}
+        />
       </Wrapper>
+
+      <BottomSheet
+        visible={respok === null ? false : true}
+        label={`Booking sesi ${respok ? 'berhasil' : 'gagal'}`}
+        labelColor={respok === false ? bgColor.error : bgColor.primary}
+        onBackdropPress={() => setRespok(null)}
+      >
+        {respok != null && respok ? (
+          <>
+            <Wrapper gap={inputButtonCardGap}>
+              <DetailItem label='Nama paket' value={'Paket bekam basah'} />
+              <DetailItem label='Harga paket' value={'Rp. 200.000'} />
+              <DetailItem label='Jam Sesi' value={'10:00 - 10:30'} />
+              <DetailItem
+                label='Keterangan'
+                value={'lorem ipsum dolor sir amet'}
+              />
+            </Wrapper>
+
+            <Button label='Lihat riwayat booking' icon='calendar' />
+          </>
+        ) : (
+          <>
+            <Typo>
+              Mohon maaf booking sesi untuk jam 10:00 - 10:30 tidak berhasil,
+              mungkin anda melakukan booking diwaktu yang bersamaan sehingga
+              waktu booking belum diperbarui. silakan pilih kembali waktu
+              booking anda
+            </Typo>
+
+            <Button label='Pilih ulang jam sesi' variant='error' icon='clock' />
+          </>
+        )}
+      </BottomSheet>
 
       <BottomSheet
         label='Pilih paket bekam'
