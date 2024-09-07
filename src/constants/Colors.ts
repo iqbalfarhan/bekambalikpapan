@@ -23,9 +23,9 @@ export const textColor: ColorType = {
   base: '#1f2939',
   base2: '#1f2939',
   base3: '#1f2939',
-  info: '#000000',
-  success: '#000000',
-  warning: '#000000',
+  info: '#fef8fd',
+  success: '#fef8fd',
+  warning: '#fef8fd',
   error: '#E7D1CF',
   ghost: '#666666',
 };

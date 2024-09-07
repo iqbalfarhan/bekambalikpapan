@@ -29,7 +29,7 @@ export default function HeaderRight(props: {
           Untuk pertanyaan dan konfirmasi, hubungi kami melalui nomor whatsapp
           berikut ini:
         </Typo>
-        <Button label={adminPhone} />
+        <Button variant='success' label={adminPhone} />
       </BottomSheet>
     </Wrapper>
   );

@@ -5,7 +5,7 @@ import { Octicons } from '@expo/vector-icons';
 import { bgColor, textColor } from '../constants/Colors';
 import { roundedBadge } from '../constants/Sizes';
 
-type BadgeProps = {
+export type BadgeProps = {
   label: string;
   variant?: keyof typeof bgColor;
   icon?: keyof typeof Octicons.glyphMap;

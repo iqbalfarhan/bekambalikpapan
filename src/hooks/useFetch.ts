@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import useAuth from './useAuth';
 import { apiEndpoint } from '../constants/Services';
 
-const useFetch = <T>(path: string, requireAuth: boolean = true) => {
+const useFetch = <T>(path: string) => {
   const { token } = useAuth();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<T | null>(null);
@@ -16,11 +16,8 @@ const useFetch = <T>(path: string, requireAuth: boolean = true) => {
       const headers: HeadersInit = {
         'Content-Type': 'application/json',
         Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
       };
-
-      if (requireAuth && token) {
-        headers.Authorization = `Bearer ${token}`;
-      }
 
       const response = await fetch(`${apiEndpoint}${path}`, {
         headers,
@@ -41,7 +38,7 @@ const useFetch = <T>(path: string, requireAuth: boolean = true) => {
     } finally {
       setIsLoading(false);
     }
-  }, [path, token, requireAuth]);
+  }, [path, token]);
 
   const refetch = useCallback(() => {
     setData(null);

@@ -1,5 +1,12 @@
-import { createContext, PropsWithChildren, useState } from 'react';
+import {
+  createContext,
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import { UserType } from '../dataTypes/UserType';
+import useAsyncStorage from '../hooks/useAsyncStorage';
 
 type AuthContextType = {
   token: string;
@@ -18,21 +25,39 @@ export const AuthContext = createContext<AuthContextType>({
 });
 
 export default function AuthProvider({ children }: PropsWithChildren) {
+  const userStore = useAsyncStorage('user');
+  const tokenStore = useAsyncStorage('token');
+
   const [user, setUser] = useState<AuthContextType['user']>(null);
   const [token, setToken] = useState<AuthContextType['token']>('');
 
+  const loadAuthData = useCallback(async () => {
+    const storedUser = await userStore.storedValue;
+    const storedToken = await tokenStore.storedValue;
+
+    if (storedUser && storedToken) {
+      setUser(storedUser);
+      setToken(storedToken);
+    }
+  }, [tokenStore.storedValue, userStore.storedValue]);
+
+  useEffect(() => {
+    loadAuthData();
+  }, [loadAuthData]);
+
   const login = (user: UserType, token: string) => {
-    setUser(user);
-    setToken(token);
+    userStore.storeValue(user).then(() => setUser(user));
+    tokenStore.storeValue(token).then(() => setToken(token));
   };
 
   const logout = () => {
-    setUser(null);
-    setToken('');
+    userStore.removeValue().then(() => setUser(null));
+    tokenStore.removeValue().then(() => setToken(''));
   };
 
   const refresh = (user: UserType) => {
     setUser(user);
+    userStore.storeValue(user);
   };
 
   return (

@@ -20,17 +20,21 @@ import DetailItem from '../components/DetailItem';
 import { bgColor } from '../constants/Colors';
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import { hariTanggal, YmdDate } from '../utils/Formatters';
-import { OrderPostType } from '../dataTypes/OrderType';
+import { OrderPostType, OrderType } from '../dataTypes/OrderType';
 import useAuth from '../hooks/useAuth';
 import { postOrder } from '../services/orderService';
-import { RouteProp, useRoute } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { TabsStackParamList } from '../layouts/TabLayout';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 const BookingScreen = () => {
   const { user, token } = useAuth();
   const sesi = useFetch<SesiType[]>('/sesi');
   const paket = useFetch<PaketType[]>('/paket');
   const { params } = useRoute<RouteProp<TabsStackParamList, 'Booking'>>();
+
+  const { navigate } =
+    useNavigation<NativeStackNavigationProp<TabsStackParamList, 'Riwayat'>>();
 
   const [tanggal, setTanggal] = useState<Date>(new Date());
   const [showPaketModal, setShowPaketModal] = useState<boolean>(false);
@@ -40,6 +44,7 @@ const BookingScreen = () => {
 
   const [selectedSesi, setSelectedSesi] = useState<SesiType | null>(null);
   const [selectedPaket, setSelectedPaket] = useState<PaketType | null>(null);
+  const [order, setOrder] = useState<OrderType | null>(null);
 
   const [respok, setRespok] = useState<boolean | null>(null);
 
@@ -82,20 +87,24 @@ const BookingScreen = () => {
     };
 
     try {
-      const response = await postOrder(token, newOrder);
+      postOrder(token, newOrder)
+        .then((response) => {
+          console.log(response);
+          setRespok(true);
 
-      if (!response.ok) {
-        setRespok(false);
-      } else {
-        setRespok(true);
-      }
+          setOrder(response);
+
+          setSelectedSesi(null);
+          setSelectedPaket(null);
+        })
+        .catch((err) => {
+          console.log(err);
+          setRespok(false);
+        });
 
       return;
     } catch (error) {
       alert(error);
-    } finally {
-      setSelectedSesi(null);
-      setSelectedPaket(null);
     }
   };
 
@@ -170,31 +179,38 @@ const BookingScreen = () => {
 
       <BottomSheet
         visible={respok === null ? false : true}
-        label={`Booking sesi ${respok ? 'berhasil' : 'gagal'}`}
+        label={`Booking ${respok ? 'berhasil' : 'gagal'}`}
         labelColor={respok === false ? bgColor.error : bgColor.primary}
         onBackdropPress={() => setRespok(null)}
       >
         {respok != null && respok ? (
           <>
             <Wrapper gap={inputButtonCardGap}>
-              <DetailItem label='Nama paket' value={'Paket bekam basah'} />
-              <DetailItem label='Harga paket' value={'Rp. 200.000'} />
-              <DetailItem label='Jam Sesi' value={'10:00 - 10:30'} />
+              <DetailItem label='Nama paket' value={order?.paket.name ?? ''} />
+              <DetailItem
+                label='Harga paket'
+                value={order?.paket.harga ?? ''}
+              />
+              <DetailItem label='Jam Sesi' value={order?.sesi.jam ?? ''} />
               <DetailItem
                 label='Keterangan'
-                value={'lorem ipsum dolor sir amet'}
+                value={order?.keterangan ?? 'Tidak ada keterangan tambahan'}
               />
             </Wrapper>
 
-            <Button label='Lihat riwayat booking' icon='calendar' />
+            <Button
+              label='Lihat riwayat booking'
+              icon='calendar'
+              onPress={() => navigate('Riwayat')}
+            />
           </>
         ) : (
           <>
             <Typo>
-              Mohon maaf booking sesi untuk jam 10:00 - 10:30 tidak berhasil,
-              mungkin anda melakukan booking diwaktu yang bersamaan sehingga
-              waktu booking belum diperbarui. silakan pilih kembali waktu
-              booking anda
+              Mohon maaf booking sesi untuk yang sudah dipilih tidak berhasil,
+              mungkin anda melakukan booking diwaktu yang bersamaan dengan orang
+              lain sehingga waktu booking belum diperbarui. silakan pilih
+              kembali waktu booking anda
             </Typo>
 
             <Button

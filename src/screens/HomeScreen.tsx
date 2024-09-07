@@ -13,7 +13,7 @@ const HomeScreen = () => {
       </Wrapper>
 
       <PaketList />
-      <Wrapper padding={containerPadding}>
+      <Wrapper flex={1} padding={containerPadding}>
         <OrderList />
       </Wrapper>
     </>

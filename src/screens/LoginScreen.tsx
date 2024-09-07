@@ -11,8 +11,8 @@ import { postLogin } from '../services/userService';
 
 export default function LoginScreen() {
   const { login } = useAuth();
-  const [email, setEmail] = useState<string>('iqbalfarhan1996@gmail.com');
-  const [password, setPassword] = useState<string>('adminoke');
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
   const [showPass, setShowPass] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
 
