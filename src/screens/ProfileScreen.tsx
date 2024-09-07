@@ -5,7 +5,7 @@ import { containerGap, inputButtonCardGap } from '../constants/Sizes';
 import useAuth from '../hooks/useAuth';
 import Button from '../components/Button';
 import Input from '../components/Input';
-import { ScrollView } from 'react-native';
+import { ScrollView, ToastAndroid } from 'react-native';
 import { bgColor } from '../constants/Colors';
 import Avatar from '../components/Avatar';
 import { postLogout, putRefresh } from '../services/userService';
@@ -32,7 +32,12 @@ const ProfileScreen = () => {
 
   const handleLogout = async () => {
     await postLogout(token)
-      .then((data) => alert(data.message))
+      .then((data) =>
+        ToastAndroid.show(
+          data.message ?? 'logout berhasil',
+          ToastAndroid.SHORT,
+        ),
+      )
       .catch((err) => alert(err))
       .finally(() => logout());
   };

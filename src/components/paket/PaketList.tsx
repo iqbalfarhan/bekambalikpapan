@@ -9,8 +9,13 @@ import useFetch from '../../hooks/useFetch';
 import BottomSheet from '../BottomSheet';
 import DetailItem from '../DetailItem';
 import Button from '../Button';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { TabsStackParamList } from '../../layouts/TabLayout';
 
 export default function PaketList() {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<TabsStackParamList, 'Booking'>>();
   const [selected, setSelected] = useState<PaketType | null>(null);
   const { data } = useFetch<PaketType[]>('/paket');
   return (
@@ -46,7 +51,15 @@ export default function PaketList() {
           <DetailItem label='Harga paket' value={selected?.harga ?? ''} />
           <DetailItem label='Keterangan' value={selected?.keterangan ?? ''} />
         </Wrapper>
-        <Button label='Pilih paket' icon='check' />
+        <Button
+          label='Pilih paket'
+          icon='check'
+          onPress={() =>
+            navigation.navigate('Booking', {
+              paket_id: selected?.id,
+            })
+          }
+        />
       </BottomSheet>
     </>
   );

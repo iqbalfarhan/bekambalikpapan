@@ -7,6 +7,7 @@ import RiwayatScreen from '../screens/RiwayatScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import { Octicons } from '@expo/vector-icons';
 import { bgColor, textColor } from '../constants/Colors';
+import HeaderRight from '../components/HeaderRight';
 
 export type TabsStackParamList = {
   Home: undefined;
@@ -55,6 +56,9 @@ export default function TabLayout() {
         tabBarShowLabel: false,
         tabBarActiveTintColor: bgColor.primary,
         tabBarInactiveTintColor: textColor.ghost,
+        headerRight: (props) => {
+          return <HeaderRight {...props} />;
+        },
       })}
     >
       <Tabs.Screen

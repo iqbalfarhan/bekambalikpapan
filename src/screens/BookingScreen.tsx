@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Wrapper from '../components/Wrapper';
 import {
   containerGap,
@@ -23,9 +23,14 @@ import { hariTanggal, YmdDate } from '../utils/Formatters';
 import { OrderPostType } from '../dataTypes/OrderType';
 import useAuth from '../hooks/useAuth';
 import { postOrder } from '../services/orderService';
+import { RouteProp, useRoute } from '@react-navigation/native';
+import { TabsStackParamList } from '../layouts/TabLayout';
 
 const BookingScreen = () => {
   const { user, token } = useAuth();
+  const sesi = useFetch<SesiType[]>('/sesi');
+  const paket = useFetch<PaketType[]>('/paket');
+  const { params } = useRoute<RouteProp<TabsStackParamList, 'Booking'>>();
 
   const [tanggal, setTanggal] = useState<Date>(new Date());
   const [showPaketModal, setShowPaketModal] = useState<boolean>(false);
@@ -36,10 +41,19 @@ const BookingScreen = () => {
   const [selectedSesi, setSelectedSesi] = useState<SesiType | null>(null);
   const [selectedPaket, setSelectedPaket] = useState<PaketType | null>(null);
 
-  const sesi = useFetch<SesiType[]>('/sesi');
-  const paket = useFetch<PaketType[]>('/paket');
-
   const [respok, setRespok] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    if (params && sesi.data && params?.sesi_id) {
+      const foundSesi = sesi.data.find((s) => s.id === params.sesi_id);
+      setSelectedSesi(foundSesi ?? null);
+    }
+
+    if (params && paket.data && params?.paket_id) {
+      const foundPaket = paket.data.find((s) => s.id === params.paket_id);
+      setSelectedPaket(foundPaket ?? null);
+    }
+  }, [sesi.data, paket.data, params]);
 
   const showDatepicker = () => {
     DateTimePickerAndroid.open({
@@ -54,6 +68,11 @@ const BookingScreen = () => {
   };
 
   const handleSubmit = async () => {
+    if (!selectedSesi || !selectedPaket) {
+      alert('Sesi dan paket harus dipilih!');
+      return;
+    }
+
     const newOrder: OrderPostType = {
       user_id: user?.id ?? 0,
       sesi_id: selectedSesi?.id ?? 0,

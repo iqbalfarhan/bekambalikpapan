@@ -9,7 +9,7 @@ type FormControlProps = PropsWithChildren & {
 export default function FormControl({ children, label }: FormControlProps) {
   return (
     <Wrapper gap={4}>
-      <Typo>{label}</Typo>
+      <Typo bold>{label}</Typo>
       {children}
     </Wrapper>
   );

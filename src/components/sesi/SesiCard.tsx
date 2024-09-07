@@ -13,6 +13,10 @@ import Badge from '../Badge';
 import { OrderType } from '../../dataTypes/OrderType';
 import useFetch from '../../hooks/useFetch';
 import Alert from '../Alert';
+import { TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { TabsStackParamList } from '../../layouts/TabLayout';
 
 type SesiCardProps = {
   data: SesiType;
@@ -20,6 +24,8 @@ type SesiCardProps = {
 };
 
 export default function SesiCard({ data, tanggal }: SesiCardProps) {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<TabsStackParamList, 'Booking'>>();
   const {
     data: sesi,
     isLoading,
@@ -65,7 +71,15 @@ export default function SesiCard({ data, tanggal }: SesiCardProps) {
           Sudah di pesan
         </Typo>
       ) : (
-        <Badge label='Order' icon='plus-circle' />
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate('Booking', {
+              sesi_id: data.id,
+            })
+          }
+        >
+          <Badge label='Order' icon='plus-circle' />
+        </TouchableOpacity>
       )}
     </Wrapper>
   );

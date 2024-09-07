@@ -32,11 +32,10 @@ export default function BottomSheet({
       />
       <Wrapper backgroundColor={bgColor.base} padding={30} gap={containerGap}>
         <Typo
-          size='xl2'
+          size='xl'
           bold
           textAlign='center'
           color={labelColor ? labelColor : bgColor.primary}
-          marginVertical={12}
         >
           {label}
         </Typo>
