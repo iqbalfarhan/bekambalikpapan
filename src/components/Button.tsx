@@ -41,7 +41,7 @@ export default function Button({
         flexDirection='row'
         backgroundColor={bgColor[variant]}
         borderRadius={roundedBtn}
-        opacity={other.disabled ? 0.3 : 1}
+        opacity={other.disabled ? 0.5 : 1}
       >
         {imgSource && (
           <Image

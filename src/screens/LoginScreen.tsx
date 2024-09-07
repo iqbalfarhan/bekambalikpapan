@@ -7,31 +7,24 @@ import Input from '../components/Input';
 import Button from '../components/Button';
 import { bgColor } from '../constants/Colors';
 import { Image } from 'react-native';
+import { postLogin } from '../services/userService';
 
 export default function LoginScreen() {
   const { login } = useAuth();
   const [email, setEmail] = useState<string>('iqbalfarhan1996@gmail.com');
   const [password, setPassword] = useState<string>('adminoke');
   const [showPass, setShowPass] = useState<boolean>(false);
-  const [requiredError, setRequiredError] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!email || !password) {
-      setRequiredError(true);
+      setError('Email dan password harus diisi');
       return;
     }
 
-    login(
-      {
-        id: 2,
-        name: 'Iqbal Farhan Syuhada',
-        email: 'iqbalfarhan1996@gmail.com',
-        photo: 'https://iqbaltesting.my.id/logoimage.png',
-        address: '840 Dedrick Radial Apt. 770\nBahringerchester, WV 36923',
-        phone: '+16788343936',
-      },
-      '1|GbiUAJafnf6W8CYemZCiiOh3Rrb1s8myxMvZp8Eq6cef3bdd',
-    );
+    await postLogin(email, password)
+      .then(({ user, token }) => login(user, token))
+      .catch((err) => setError(err.message));
   };
   return (
     <Wrapper
@@ -69,9 +62,9 @@ export default function LoginScreen() {
           secureTextEntry={!showPass}
           onRightIconPress={() => setShowPass(!showPass)}
         />
-        {requiredError && (
+        {error && (
           <Typo size='sm' color={bgColor.error}>
-            Email dan password harus diisi
+            {error}
           </Typo>
         )}
       </Wrapper>

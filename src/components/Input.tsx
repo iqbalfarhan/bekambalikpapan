@@ -44,7 +44,7 @@ export default function Input({
         placeholderTextColor={textColor.ghost}
         style={{
           flex: 1,
-          fontFamily: 'Geologica-Medium',
+          fontFamily: 'MontserratAlternates-Medium',
           fontSize: 16,
           color: textColor.base,
           lineHeight: 24,

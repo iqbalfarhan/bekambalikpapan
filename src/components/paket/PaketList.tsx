@@ -17,7 +17,7 @@ export default function PaketList() {
     <>
       <Wrapper gap={10}>
         <Wrapper paddingHorizontal={containerPadding}>
-          <Typo size='xl' bold>
+          <Typo size='lg' bold>
             Paket bekam
           </Typo>
         </Wrapper>

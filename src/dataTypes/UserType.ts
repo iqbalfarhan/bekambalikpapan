@@ -6,3 +6,10 @@ export type UserType = {
   address: string;
   photo: string;
 };
+
+export type UserUpdatePostType = {
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+};

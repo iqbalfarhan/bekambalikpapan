@@ -16,7 +16,9 @@ export default function Typo({
   ...other
 }: TypoProps) {
   const initialStyle: TextStyle = {
-    fontFamily: bold ? 'Geologica-Bold' : 'Geologica-Medium',
+    fontFamily: bold
+      ? 'MontserratAlternates-Bold'
+      : 'MontserratAlternates-Medium',
     color: color ? color : textColor.base,
     ...other,
   };

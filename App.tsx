@@ -19,9 +19,9 @@ const MyTheme = {
 
 export default function App() {
   const [fontsLoaded] = useFonts({
-    'Geologica-Black': require('./assets/fonts/Geologica-Black.ttf'),
-    'Geologica-Bold': require('./assets/fonts/Geologica-Bold.ttf'),
-    'Geologica-Medium': require('./assets/fonts/Geologica-Medium.ttf'),
+    'MontserratAlternates-Black': require('./assets/fonts/MontserratAlternates-Black.ttf'),
+    'MontserratAlternates-Bold': require('./assets/fonts/MontserratAlternates-Bold.ttf'),
+    'MontserratAlternates-Medium': require('./assets/fonts/MontserratAlternates-Medium.ttf'),
   });
 
   useEffect(() => {

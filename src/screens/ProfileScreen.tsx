@@ -8,13 +8,35 @@ import Input from '../components/Input';
 import { ScrollView } from 'react-native';
 import { bgColor } from '../constants/Colors';
 import Avatar from '../components/Avatar';
+import { postLogout, putRefresh } from '../services/userService';
+import { UserUpdatePostType } from '../dataTypes/UserType';
 
 const ProfileScreen = () => {
-  const { logout, user } = useAuth();
+  const { logout, user, token, refresh } = useAuth();
   const [name, setName] = useState<string>(user?.name ?? '');
   const [email, setEmail] = useState<string>(user?.email ?? '');
   const [phone, setPhone] = useState<string>(user?.phone ?? '');
   const [address, setAddress] = useState<string>(user?.address ?? '');
+
+  const handleUpdate = async () => {
+    const newUserData: UserUpdatePostType = {
+      name,
+      email,
+      phone,
+      address,
+    };
+    await putRefresh(token, newUserData)
+      .then((updatedUserData) => refresh(updatedUserData))
+      .catch((err) => alert(err));
+  };
+
+  const handleLogout = async () => {
+    await postLogout(token)
+      .then((data) => alert(data.message))
+      .catch((err) => alert(err))
+      .finally(() => logout());
+  };
+
   return (
     <ScrollView>
       <Wrapper padding={40} gap={containerGap}>
@@ -44,6 +66,7 @@ const ProfileScreen = () => {
           <Input
             leftIcon='mail'
             placeholder='Alamat email'
+            editable={false}
             value={email}
             onChangeText={(text) => setEmail(text)}
           />
@@ -52,6 +75,7 @@ const ProfileScreen = () => {
             placeholder='Nomor telepon'
             value={phone}
             onChangeText={(text) => setPhone(text)}
+            inputMode='numeric'
           />
           <Input
             leftIcon='location'
@@ -61,7 +85,11 @@ const ProfileScreen = () => {
           />
         </Wrapper>
         <Wrapper gap={inputButtonCardGap} width={'100%'}>
-          <Button label='Simpan perubahan' icon='check' />
+          <Button
+            label='Simpan perubahan'
+            icon='check'
+            onPress={handleUpdate}
+          />
           <Typo textAlign='center' size='sm' opacity={0.5} marginVertical={10}>
             Keluar aplikasi
           </Typo>
@@ -69,7 +97,7 @@ const ProfileScreen = () => {
             icon='sign-out'
             variant='error'
             label='logout'
-            onPress={logout}
+            onPress={handleLogout}
           />
         </Wrapper>
       </Wrapper>

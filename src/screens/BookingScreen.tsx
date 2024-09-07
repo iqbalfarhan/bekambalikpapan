@@ -18,21 +18,78 @@ import { SesiType } from '../dataTypes/SesiType';
 import CheckBox from '../components/CheckBox';
 import DetailItem from '../components/DetailItem';
 import { bgColor } from '../constants/Colors';
+import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
+import { hariTanggal, YmdDate } from '../utils/Formatters';
+import { OrderPostType } from '../dataTypes/OrderType';
+import useAuth from '../hooks/useAuth';
+import { postOrder } from '../services/orderService';
 
 const BookingScreen = () => {
+  const { user, token } = useAuth();
+
+  const [tanggal, setTanggal] = useState<Date>(new Date());
   const [showPaketModal, setShowPaketModal] = useState<boolean>(false);
   const [showSesiModal, setShowSesiModal] = useState<boolean>(false);
   const [terima, setTerima] = useState<boolean>(false);
+  const [keterangan, setKeterangan] = useState<string>('');
+
+  const [selectedSesi, setSelectedSesi] = useState<SesiType | null>(null);
+  const [selectedPaket, setSelectedPaket] = useState<PaketType | null>(null);
+
   const sesi = useFetch<SesiType[]>('/sesi');
   const paket = useFetch<PaketType[]>('/paket');
 
   const [respok, setRespok] = useState<boolean | null>(null);
+
+  const showDatepicker = () => {
+    DateTimePickerAndroid.open({
+      value: tanggal,
+      onChange: (event, selectedDate) => {
+        const currentDate = selectedDate;
+        setTanggal(currentDate as Date);
+      },
+      mode: 'date',
+      is24Hour: true,
+    });
+  };
+
+  const handleSubmit = async () => {
+    const newOrder: OrderPostType = {
+      user_id: user?.id ?? 0,
+      sesi_id: selectedSesi?.id ?? 0,
+      paket_id: selectedPaket?.id ?? 0,
+      tanggal: YmdDate(tanggal),
+      keterangan: keterangan,
+    };
+
+    try {
+      const response = await postOrder(token, newOrder);
+
+      if (!response.ok) {
+        setRespok(false);
+      } else {
+        setRespok(true);
+      }
+
+      return;
+    } catch (error) {
+      alert(error);
+    } finally {
+      setSelectedSesi(null);
+      setSelectedPaket(null);
+    }
+  };
+
   return (
     <>
       <Wrapper padding={containerPadding} gap={containerGap}>
         <FormControl label='Pilih tanggal booking'>
-          <Pressable onPress={() => alert(JSON.stringify(sesi.data))}>
-            <Input leftIcon='calendar' editable={false} value='2024-09-06' />
+          <Pressable onPress={showDatepicker}>
+            <Input
+              leftIcon='calendar'
+              editable={false}
+              value={hariTanggal(tanggal.toISOString())}
+            />
           </Pressable>
         </FormControl>
         <FormControl label='Waktu sesi'>
@@ -41,6 +98,11 @@ const BookingScreen = () => {
               leftIcon='clock'
               rightIcon='chevron-down'
               placeholder='pilih sesi bekam'
+              value={
+                selectedSesi
+                  ? `${selectedSesi?.name} - ${selectedSesi?.jam}`
+                  : ''
+              }
               editable={false}
             />
           </Pressable>
@@ -51,12 +113,22 @@ const BookingScreen = () => {
               leftIcon='list-unordered'
               rightIcon='chevron-down'
               placeholder='pilih paket bekam'
+              value={
+                selectedPaket
+                  ? `${selectedPaket?.name} - ${selectedPaket?.harga}`
+                  : ''
+              }
               editable={false}
             />
           </Pressable>
         </FormControl>
         <FormControl label='Keterangan (opsional)'>
-          <Input leftIcon='pencil' placeholder='keterangan order' />
+          <Input
+            leftIcon='pencil'
+            placeholder='keterangan order'
+            value={keterangan}
+            onChangeText={(text) => setKeterangan(text)}
+          />
         </FormControl>
         <Typo size='sm' opacity={0.7}>
           Ketentuan : Proses ini akan melibatkan admin bekam Balikpapan untuk
@@ -73,7 +145,7 @@ const BookingScreen = () => {
           label='Kirim permintaan'
           icon='check'
           disabled={!terima}
-          onPress={() => setRespok(false)}
+          onPress={handleSubmit}
         />
       </Wrapper>
 
@@ -106,7 +178,14 @@ const BookingScreen = () => {
               booking anda
             </Typo>
 
-            <Button label='Pilih ulang jam sesi' variant='error' icon='clock' />
+            <Button
+              label='Pilih ulang jam sesi'
+              variant='error'
+              icon='clock'
+              onPress={() => {
+                setRespok(null);
+              }}
+            />
           </>
         )}
       </BottomSheet>
@@ -120,6 +199,10 @@ const BookingScreen = () => {
           {paket.data &&
             paket.data.map((itempaket) => (
               <Button
+                onPress={() => {
+                  setShowPaketModal(false);
+                  setSelectedPaket(itempaket);
+                }}
                 variant='base3'
                 key={itempaket.id}
                 label={[itempaket.name, itempaket.harga].join(' - ')}
@@ -132,7 +215,6 @@ const BookingScreen = () => {
         label='Pilih sesi bekam'
         visible={showSesiModal}
         onBackdropPress={() => setShowSesiModal(false)}
-        onRequestClose={() => setShowSesiModal(false)}
       >
         <Wrapper maxHeight={400} borderRadius={roundedBox} overflow='hidden'>
           <ScrollView>
@@ -140,6 +222,10 @@ const BookingScreen = () => {
               {sesi.data &&
                 sesi.data.map((itemsesi) => (
                   <Button
+                    onPress={() => {
+                      setSelectedSesi(itemsesi);
+                      setShowSesiModal(false);
+                    }}
                     variant='base3'
                     key={itemsesi.id}
                     label={[itemsesi.name, `(jam ${itemsesi.jam})`].join(' - ')}

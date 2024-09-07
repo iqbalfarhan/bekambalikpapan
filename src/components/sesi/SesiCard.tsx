@@ -16,14 +16,15 @@ import Alert from '../Alert';
 
 type SesiCardProps = {
   data: SesiType;
+  tanggal: string;
 };
 
-export default function SesiCard({ data }: SesiCardProps) {
+export default function SesiCard({ data, tanggal }: SesiCardProps) {
   const {
     data: sesi,
     isLoading,
     error,
-  } = useFetch<OrderType[]>(`/order/${data.id}/2024-09-06`);
+  } = useFetch<OrderType[]>(`/order/${data.id}/${tanggal}`);
 
   if (error) {
     return <Alert message={error} />;

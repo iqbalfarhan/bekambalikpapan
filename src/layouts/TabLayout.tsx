@@ -50,7 +50,7 @@ export default function TabLayout() {
           height: 60,
         },
         headerTitleStyle: {
-          fontFamily: 'Geologica-Bold',
+          fontFamily: 'MontserratAlternates-Bold',
         },
         tabBarShowLabel: false,
         tabBarActiveTintColor: bgColor.primary,

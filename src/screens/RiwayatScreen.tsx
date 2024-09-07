@@ -12,7 +12,7 @@ import {
 import OrderCard from '../components/order/OrderCard';
 import BottomSheet from '../components/BottomSheet';
 import DetailItem from '../components/DetailItem';
-import { hariTanggal } from '../utils/Formatters';
+import { DateTimeLocale, hariTanggal } from '../utils/Formatters';
 
 const RiwayatScreen = () => {
   const { isLoading, data, error, refetch } = useFetch<OrderType[]>('/order');
@@ -47,7 +47,12 @@ const RiwayatScreen = () => {
           <DetailItem label='Jam sesi' value={selected?.sesi.jam ?? ''} />
           <DetailItem label='Nama paket' value={selected?.paket.name ?? ''} />
           <DetailItem label='Harga paket' value={selected?.paket.harga ?? ''} />
-          <DetailItem label='Dipesan pada' value={selected?.tanggal ?? ''} />
+          <DetailItem
+            label='Dipesan pada'
+            value={
+              selected ? DateTimeLocale(new Date(selected?.created_at)) : ''
+            }
+          />
           <DetailItem label='Status pemesanan' value={selected?.status ?? ''} />
         </Wrapper>
       </BottomSheet>
