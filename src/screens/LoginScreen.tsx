@@ -8,8 +8,37 @@ import Button from '../components/Button';
 import { bgColor } from '../constants/Colors';
 import { Image } from 'react-native';
 import { postLogin } from '../services/userService';
+import * as WebBrowser from 'expo-web-browser';
+import * as AuthSession from 'expo-auth-session';
+
+const LOGIN_URL = 'https://iqbaltesting.my.id/googlelogin';
+const REDIRECT_URI = AuthSession.makeRedirectUri();
 
 export default function LoginScreen() {
+  const handleGoogleLogin = async () => {
+    try {
+      const result = await WebBrowser.openAuthSessionAsync(
+        LOGIN_URL,
+        REDIRECT_URI,
+      );
+
+      if (result.type === 'success') {
+        const { url } = result;
+        const token = new URLSearchParams(url.split('?')[1]).get('token');
+
+        if (token) {
+          console.log('Token berhasil didapatkan:', token);
+        } else {
+          throw new Error('Token tidak ditemukan!');
+        }
+      } else {
+        console.log('Login dibatalkan atau gagal');
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const { login } = useAuth();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -77,6 +106,7 @@ export default function LoginScreen() {
           imgSource={require('../../assets/googleicon.png')}
           variant='base3'
           label='Login dengan google'
+          onPress={handleGoogleLogin}
         />
       </Wrapper>
     </Wrapper>
