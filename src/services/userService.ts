@@ -1,5 +1,9 @@
 import { apiEndpoint } from '../constants/Services';
-import { UserType, UserUpdatePostType } from '../dataTypes/UserType';
+import {
+  RegisterPostType,
+  UserType,
+  UserUpdatePostType,
+} from '../dataTypes/UserType';
 
 export async function postLogin(email: string, password: string) {
   const url = apiEndpoint + '/login';
@@ -11,6 +15,25 @@ export async function postLogin(email: string, password: string) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ email, password }),
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to login');
+  }
+
+  const data = await response.json();
+  return { token: data.token, user: data.user };
+}
+
+export async function postRegister(dataPost: RegisterPostType) {
+  const url = apiEndpoint + '/register';
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(dataPost),
   });
 
   if (!response.ok) {

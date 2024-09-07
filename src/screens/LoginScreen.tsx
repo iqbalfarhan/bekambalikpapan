@@ -6,10 +6,13 @@ import { inputButtonCardGap } from '../constants/Sizes';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import { bgColor } from '../constants/Colors';
-import { Alert, Image } from 'react-native';
-import { postLogin } from '../services/userService';
+import { Image } from 'react-native';
+import { postLogin, postRegister } from '../services/userService';
 import * as WebBrowser from 'expo-web-browser';
-import * as Linking from 'expo-linking';
+import * as Google from 'expo-auth-session/providers/google';
+import { androidClientId } from '../constants/Services';
+
+WebBrowser.maybeCompleteAuthSession();
 
 export default function LoginScreen() {
   const { login } = useAuth();
@@ -18,25 +21,40 @@ export default function LoginScreen() {
   const [showPass, setShowPass] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
 
-  const handleDeepLink = (event: { url: string }) => {
-    let data = event.url;
-    console.log('URL Deep Link:', data);
-    Alert.alert('Deep Link Diterima', data);
-    WebBrowser.dismissBrowser();
-  };
+  const [, response, promptAsync] = Google.useAuthRequest({
+    androidClientId,
+  });
 
   useEffect(() => {
-    const subscription = Linking.addEventListener('url', handleDeepLink);
-    return () => {
-      subscription.remove();
-    };
-  }, []);
+    async function fetchUserData() {
+      try {
+        if (response?.type === 'success') {
+          const accessToken = response.authentication?.accessToken;
 
-  const openBrowserAndLogin = async () => {
-    await WebBrowser.openBrowserAsync(
-      'https://iqbaltesting.my.id/googleredirect',
-    );
-  };
+          fetch('https://www.googleapis.com/userinfo/v2/me', {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          })
+            .then((res) => res.json())
+            .then((resjson) => {
+              postRegister({
+                name: resjson.name,
+                email: resjson.email,
+                google_id: resjson.id,
+                photo: resjson.picture,
+              }).then(({ token, user }) => login(user, token));
+            });
+        }
+      } catch (error) {
+        console.error('Terjadi kesalahan:', error);
+      }
+    }
+
+    if (response) {
+      fetchUserData();
+    }
+  }, [response, login]);
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -99,7 +117,7 @@ export default function LoginScreen() {
           imgSource={require('../../assets/googleicon.png')}
           variant='base3'
           label='Login dengan google'
-          onPress={openBrowserAndLogin}
+          onPress={() => promptAsync()}
         />
       </Wrapper>
     </Wrapper>

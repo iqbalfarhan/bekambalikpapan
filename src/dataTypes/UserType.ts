@@ -13,3 +13,10 @@ export type UserUpdatePostType = {
   phone: string;
   address: string;
 };
+
+export type RegisterPostType = {
+  name: string;
+  email: string;
+  google_id: string;
+  photo: string;
+};
