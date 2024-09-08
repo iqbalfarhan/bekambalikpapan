@@ -31,35 +31,35 @@ export default function Typo({
 
 const styles = StyleSheet.create({
   sm: {
+    fontSize: 12,
+    lineHeight: 16,
+  },
+  base: {
     fontSize: 14,
     lineHeight: 20,
   },
-  base: {
+  lg: {
     fontSize: 16,
     lineHeight: 24,
   },
-  lg: {
+  xl: {
     fontSize: 18,
     lineHeight: 28,
   },
-  xl: {
+  xl2: {
     fontSize: 20,
     lineHeight: 28,
   },
-  xl2: {
+  xl3: {
     fontSize: 24,
     lineHeight: 32,
   },
-  xl3: {
+  xl4: {
     fontSize: 30,
     lineHeight: 36,
   },
-  xl4: {
+  xl5: {
     fontSize: 36,
     lineHeight: 40,
-  },
-  xl5: {
-    fontSize: 48,
-    lineHeight: undefined,
   },
 });

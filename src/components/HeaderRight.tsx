@@ -5,6 +5,7 @@ import Wrapper from './Wrapper';
 import Typo from './Typo';
 import Button from './Button';
 import { adminPhone } from '../constants/Services';
+import { Linking } from 'react-native';
 
 export default function HeaderRight(props: {
   tintColor?: string;
@@ -12,6 +13,16 @@ export default function HeaderRight(props: {
   pressOpacity?: number;
 }) {
   const [show, setShow] = useState<boolean>(false);
+  const openWhatsApp = () => {
+    let url = `whatsapp://send?phone=${adminPhone}`;
+    Linking.openURL(url)
+      .then((supported) => {
+        if (!supported) {
+          alert('Aplikasi WhatsApp tidak terinstal');
+        }
+      })
+      .catch((err) => console.error('Error:', err));
+  };
   return (
     <Wrapper marginRight={20} opacity={props.pressOpacity}>
       <Octicons
@@ -29,7 +40,12 @@ export default function HeaderRight(props: {
           Untuk pertanyaan dan konfirmasi, hubungi kami melalui nomor whatsapp
           berikut ini:
         </Typo>
-        <Button variant='success' label={adminPhone} />
+        <Button
+          variant='success'
+          icon={'comment'}
+          label={adminPhone}
+          onPress={openWhatsApp}
+        />
       </BottomSheet>
     </Wrapper>
   );

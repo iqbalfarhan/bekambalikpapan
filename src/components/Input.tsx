@@ -5,6 +5,7 @@ import { bgColor, textColor } from '../constants/Colors';
 import {
   inputButtonGap,
   inputButtonHeight,
+  inputButtonIconSize,
   roundedBtn,
 } from '../constants/Sizes';
 
@@ -20,6 +21,7 @@ export default function Input({
   onRightIconPress,
   ...other
 }: InputProps) {
+  const iconSize = inputButtonIconSize;
   return (
     <Wrapper
       backgroundColor={bgColor.base3}
@@ -32,12 +34,12 @@ export default function Input({
     >
       {leftIcon && (
         <Wrapper
-          width={20}
-          height={20}
+          width={iconSize}
+          height={iconSize}
           alignItems='center'
           justifyContent='center'
         >
-          <Octicons name={leftIcon} size={20} color={textColor.base} />
+          <Octicons name={leftIcon} size={iconSize} color={textColor.base} />
         </Wrapper>
       )}
       <TextInput
@@ -54,12 +56,12 @@ export default function Input({
       {rightIcon && (
         <TouchableOpacity onPress={onRightIconPress}>
           <Wrapper
-            width={20}
-            height={20}
+            width={iconSize}
+            height={iconSize}
             alignItems='center'
             justifyContent='center'
           >
-            <Octicons name={rightIcon} size={20} color={textColor.base} />
+            <Octicons name={rightIcon} size={iconSize} color={textColor.base} />
           </Wrapper>
         </TouchableOpacity>
       )}

@@ -12,6 +12,7 @@ import { bgColor, textColor } from '../constants/Colors';
 import {
   inputButtonGap,
   inputButtonHeight,
+  inputButtonIconSize,
   roundedBtn,
 } from '../constants/Sizes';
 
@@ -29,7 +30,7 @@ export default function Button({
   variant = 'primary',
   ...other
 }: CustomButtonProps) {
-  const iconSize = 20;
+  const iconSize = inputButtonIconSize;
 
   return (
     <TouchableOpacity {...other}>

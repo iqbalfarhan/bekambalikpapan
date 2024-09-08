@@ -109,7 +109,7 @@ const BookingScreen = () => {
   };
 
   return (
-    <>
+    <ScrollView>
       <Wrapper padding={containerPadding} gap={containerGap}>
         <FormControl label='Pilih tanggal booking'>
           <Pressable onPress={showDatepicker}>
@@ -270,7 +270,7 @@ const BookingScreen = () => {
           </ScrollView>
         </Wrapper>
       </BottomSheet>
-    </>
+    </ScrollView>
   );
 };
 

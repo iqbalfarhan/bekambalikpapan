@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import Wrapper from '../components/Wrapper';
 import Typo from '../components/Typo';
-import { containerGap, inputButtonCardGap } from '../constants/Sizes';
+import {
+  containerGap,
+  containerPadding,
+  inputButtonCardGap,
+} from '../constants/Sizes';
 import useAuth from '../hooks/useAuth';
 import Button from '../components/Button';
 import Input from '../components/Input';
@@ -44,7 +48,7 @@ const ProfileScreen = () => {
 
   return (
     <ScrollView>
-      <Wrapper padding={40} gap={containerGap}>
+      <Wrapper padding={containerPadding} gap={containerGap}>
         <Wrapper
           aspectRatio={16 / 9}
           justifyContent='center'
