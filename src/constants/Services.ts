@@ -1,5 +1,5 @@
-export const apiEndpoint = 'https://iqbaltesting.my.id/api';
-export const adminPhone = '628999779527';
+export const apiEndpoint = 'https://2113007sap.my.id/api';
+export const adminPhone = '+6282157119711';
 export const androidClientId =
   '1061122686589-7poo7q38vg6daafe5kdlndbuujiq8tl1.apps.googleusercontent.com';
 export const webClientId =

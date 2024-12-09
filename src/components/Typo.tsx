@@ -13,6 +13,7 @@ export default function Typo({
   color,
   bold = false,
   size = 'base',
+  style,
   ...other
 }: TypoProps) {
   const initialStyle: TextStyle = {
@@ -23,7 +24,7 @@ export default function Typo({
     ...other,
   };
   return (
-    <Text style={[initialStyle, styles[size]]} {...other}>
+    <Text style={[initialStyle, styles[size], style]} {...other}>
       {children}
     </Text>
   );

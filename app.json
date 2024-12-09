@@ -30,6 +30,7 @@
         "projectId": "94ed7efc-9df2-4250-99dc-087d268e85a4"
       }
     },
-    "scheme": "bekambalikpapan"
+    "scheme": "bekambalikpapan",
+    "newArchEnabled": true
   }
 }

@@ -91,6 +91,7 @@ export default function LoginScreen() {
           placeholder='Email'
           leftIcon='person'
           value={email}
+          inputMode='email'
           onChangeText={(text) => setEmail(text)}
         />
         <Input
